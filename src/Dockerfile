@@ -1,15 +1,19 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /app
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
+# copy csproj and restore as distinct layers
+COPY *.sln .
+COPY dotnet-todo/*.csproj ./dotnet-todo/
 RUN dotnet restore
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+# copy everything else and build app
+COPY dotnet-todo/. ./dotnet-todo/
+WORKDIR /src/dotnet-todo
+RUN dotnet publish -c release -o /dotnet-todo --no-restore
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
-WORKDIR /app
-COPY --from=build /app/out .
-ENTRYPOINT ["dotnet", "dotnet-todo.dll"]
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /dotnet-todo
+COPY --from=build /dotnet-todo ./
+ENTRYPOINT ["dotnet", "aspnetapp.dll"]
