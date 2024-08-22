@@ -36,3 +36,11 @@ The call to GET /todoitems produces a response similar to the following:
 ```
 
 This app uses an in-memory database. If the app is restarted, the GET request doesn't return any data. If no data is returned, POST data to the app and try the GET request again.
+
+## Building and Running the Docker Image
+
+To build the Docker image:
+```sh
+docker build -t myapp .
+
+docker run -d -p 8080:80 myapp
