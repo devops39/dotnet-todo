@@ -41,9 +41,9 @@ This app uses an in-memory database. If the app is restarted, the GET request do
 
 To build the Docker image:
 ```sh
-docker build -t myapp .
+docker build -t appimg .
 
-docker run -d -p 8080:80 myapp
+docker run -d -p 8080:80 appimg
 
 Access the Application:
 Open your browser and navigate to http://localhost:8080.
