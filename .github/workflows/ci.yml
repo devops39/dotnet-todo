@@ -19,7 +19,13 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0' # Use appropriate .NET version
+          dotnet-version: '8.0'
+
+      - name: Install SonarScanner for .NET
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Add .NET tools to PATH
+        run: echo "::add-path::$(dotnet tool path)"
 
       - name: Install dependencies
         run: dotnet restore src/TodoApi.csproj
