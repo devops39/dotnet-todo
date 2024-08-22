@@ -44,3 +44,6 @@ To build the Docker image:
 docker build -t myapp .
 
 docker run -d -p 8080:80 myapp
+
+Access the Application:
+Open your browser and navigate to http://localhost:8080.
