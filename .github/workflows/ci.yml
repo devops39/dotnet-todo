@@ -14,15 +14,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'  # Use Java 17 which is compatible with SonarScanner
+          distribution: 'temurin'  # Set the Java distribution
+          java-version: '17'        # Specify the Java version
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
