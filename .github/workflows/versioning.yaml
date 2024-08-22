@@ -1,0 +1,11 @@
+- name: Determine version
+  id: version
+  uses: fredrikve/version@v1
+  with:
+    version: v1.0.0
+
+- name: Build Docker Image with Version Tag
+  run: |
+    docker build -t myapp:${{ steps.version.outputs.version }} .
+    docker tag myapp:${{ steps.version.outputs.version }} https://github.com/devops39/dotnet-todo/myapp:${{ steps.version.outputs.version }}
+    docker push https://github.com/devops39/dotnet-todo/myapp:${{ steps.version.outputs.version }}
