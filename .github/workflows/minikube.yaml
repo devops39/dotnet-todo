@@ -1,0 +1,30 @@
+name: Kubernetes Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Minikube
+        uses: manusa/actions-setup-minikube@v2
+        with:
+          minikube-version: 'v1.24.0'
+          driver: docker
+
+      - name: Helm Install
+        run: |
+          helm install myapp ./helm-chart
+          kubectl get pods
+
+      - name: Test Application
+        run: |
+          kubectl port-forward service/myapp 8080:80 &
+          curl http://localhost:8080/todo
