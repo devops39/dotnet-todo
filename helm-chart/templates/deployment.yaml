@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "myapp.fullname" . }}
+  name: {{ include "myapp.TodoApi" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
