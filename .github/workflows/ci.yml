@@ -14,18 +14,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0'
+          dotnet-version: '8.0.x'
 
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: Add .NET tools to PATH
-        run: echo "::add-path::$(dotnet tool path)"
+        shell: bash
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: dotnet restore src/TodoApi.csproj
