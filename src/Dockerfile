@@ -26,4 +26,4 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Set the entry point for the container
-ENTRYPOINT ["dotnet", "dotnet-todo.dll"]
+ENTRYPOINT ["dotnet", "appimg.dll"]
