@@ -16,7 +16,7 @@ jobs:
       - name: Set up Minikube
         uses: medyagh/setup-minikube@latest
         with:
-          minikube-version: 'v1.33.1'
+         
           driver: docker
 
       - name: Helm Install
