@@ -1,15 +1,23 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+# Copy the project files to the working directory
+COPY . ./
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
+# Restore the dependencies
 RUN dotnet restore
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+# Build the application in release mode
+RUN dotnet build -c Release --no-restore
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+# Publish the application to a directory
+RUN dotnet publish -c Release --no-restore -o /app/publish
+
+# Use the official ASP.NET Core runtime image as a runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+# Set the working directory inside the container
 WORKDIR /app
-COPY --from=build /app/out .
-ENTRYPOINT ["dotnet", "dotnet-todo.dll"]
+
+# Copy the published output from the build stage
+COPY --from=build /app/publish .
+
+# Set the entry point for the container
+ENTRYPOINT ["dotnet", "TodoApi.dll"]
