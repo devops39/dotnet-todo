@@ -20,7 +20,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t myapp:${{ github.sha }} .
+          docker build -t myapp:${{ https://github.com/devops39/dotnet-todo/blob/main/.github/workflows/Dockerfile }} .
 
       - name: Code Analysis with SonarCloud
         uses: sonarsource/sonarcloud-github-action@v1.7
