@@ -8,22 +8,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0
+          dotnet-version: '8.0'
 
       - name: Build Docker Image
-        run: docker build -t myapp:${{ github.sha }} .
+        run: |
+          docker build -t myapp:${{ github.sha }} .
 
-      - name: Run Code Analysis
-        uses: github/codeql-action/analyze@v4
+      - name: Code Analysis with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@v1.7
         with:
-          category: "/Language-Specific/JavaScript"
+          projectBaseDir: ./
+          args: >
+            -Dsonar.projectKey=myprojectkey
+            -Dsonar.organization=myorganization
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
       - name: Push Docker Image
-        run: echo "Push Docker image command here"
+        run: |
+          docker tag myapp:${{ github.sha }} <your-docker-repo>/myapp:${{ github.sha }}
+          docker push <your-docker-repo>/myapp:${{ github.sha }}
