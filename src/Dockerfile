@@ -4,16 +4,16 @@ WORKDIR /src
 
 # copy csproj and restore as distinct layers
 COPY *.sln .
-COPY dotnet-todo/*.csproj ./dotnet-todo/
+COPY aspnetapp/*.csproj ./aspnetapp/
 RUN dotnet restore
 
 # copy everything else and build app
-COPY dotnet-todo/. ./dotnet-todo/
-WORKDIR /src/dotnet-todo
-RUN dotnet publish -c release -o /dotnet-todo --no-restore
+COPY aspnetapp/. ./aspnetapp/
+WORKDIR /src/aspnetapp
+RUN dotnet publish -c release -o /app --no-restore
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /dotnet-todo
-COPY --from=build /dotnet-todo ./
+WORKDIR /app
+COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "aspnetapp.dll"]
