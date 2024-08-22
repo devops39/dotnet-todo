@@ -1,3 +1,4 @@
+
 name: SonarCloud Analysis
 
 on:
@@ -30,7 +31,8 @@ jobs:
       - name: Run SonarCloud scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
+        run: 
+          cd src
           dotnet sonarscanner begin /k:"devops39_dotnet-todo" /o:"devops39" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build
           dotnet sonarscanner end
