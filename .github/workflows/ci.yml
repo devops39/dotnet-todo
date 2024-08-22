@@ -1,4 +1,3 @@
-
 name: SonarCloud Analysis
 
 on:
@@ -20,19 +19,18 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0'
+          dotnet-version: '8.0' # Use appropriate .NET version
 
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore src/TodoApi.csproj
 
       - name: Build the solution
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore src/TodoApi.csproj
 
       - name: Run SonarCloud scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: 
-          cd src
+        run: |
           dotnet sonarscanner begin /k:"devops39_dotnet-todo" /o:"devops39" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build
+          dotnet build src/TodoApi.csproj
           dotnet sonarscanner end
