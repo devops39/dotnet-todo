@@ -23,8 +23,12 @@ jobs:
         run: 
           helm install myapp ./helm-chart
 
-      - name: Get Pods Status
-        run: kubectl describe pod <pod-name>
+      
+       - name: Get Pod Name
+  run: |
+    POD_NAME=$(kubectl get pods -l app=myapp -o jsonpath="{.items[0].metadata.name}")
+    kubectl describe pod $POD_NAME
+
 
         
       - name: Test Application
