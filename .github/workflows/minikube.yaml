@@ -24,7 +24,8 @@ jobs:
           helm install myapp ./helm-chart
 
       - name: Get Pods Status
-        run: kubectl get pods --watch
+        run: kubectl describe pod <pod-name>
+
         
       - name: Test Application
         run: 
