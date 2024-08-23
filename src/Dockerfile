@@ -1,23 +1,19 @@
-# Use the official ASP.NET Core runtime as a parent image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 80
-
-# Use the official .NET SDK as a build image
+# https://hub.docker.com/_/microsoft-dotnet
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["src/TodoApi.csproj", "./"]
-RUN dotnet restore "./TodoApi.csproj"
-COPY . .
-WORKDIR "/src"
-RUN dotnet build "TodoApi.csproj" -c Release -o /app/build
+WORKDIR /source
 
-# Publish the build artifacts
-FROM build AS publish
-RUN dotnet publish "TodoApi.csproj" -c Release -o /app/publish
+# copy csproj and restore as distinct layers
+COPY *.sln .
+COPY dotne-todo/*.csproj ./aspnetapp/
+RUN dotnet restore
 
-# Use the base image and copy the build artifacts into the final image
-FROM base AS final
+# copy everything else and build app
+COPY dotnet-todo/. ./aspnetapp/
+WORKDIR /source/aspnetapp
+RUN dotnet publish -c release -o /app --no-restore
+
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "TodoApi.dll"]
