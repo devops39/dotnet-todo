@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v2
 
       - name: Install dependencies
         run: |
@@ -31,6 +31,19 @@ jobs:
           sudo tar -C /usr/local/bin -xzf crictl-$VERSION-linux-amd64.tar.gz
           rm crictl-$VERSION-linux-amd64.tar.gz
 
+      - name: Install cri-dockerd
+        run: |
+          sudo apt-get install -y git wget curl golang-go
+          git clone https://github.com/Mirantis/cri-dockerd.git
+          cd cri-dockerd
+          mkdir bin
+          go build -o bin/cri-dockerd
+          sudo install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd
+          sudo install -o root -g root -m 0644 packaging/systemd/* /etc/systemd/system/
+          sudo systemctl daemon-reload
+          sudo systemctl enable cri-docker.service
+          sudo systemctl enable --now cri-docker.socket
+
       - name: Install Minikube
         run: |
           curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -39,7 +52,7 @@ jobs:
 
       - name: Start Minikube
         run: |
-          sudo minikube start --driver=none
+          sudo minikube start --driver=none --container-runtime=docker
           minikube status
 
       - name: Verify Kubernetes Cluster
