@@ -19,32 +19,37 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '6.0.x'
 
       - name: Build the project
-        run: dotnet build --configuration Release
+        run: |
+          cd src # Navigate to the directory containing the .csproj file
+          dotnet build --configuration Release
 
       - name: Run tests
-        run: dotnet test --configuration Release --collect:"Code Coverage"
+        run: |
+          cd src # Navigate to the directory containing the .csproj file
+          dotnet test --configuration Release --collect:"Code Coverage"
 
       - name: Prepare SonarCloud properties
         run: |
+          cd src # Navigate to the directory containing the .csproj file
           echo "sonar.projectKey=devops39_dotnet-todo" >> $GITHUB_ENV
-          echo "sonar.organization=your-sonarcloud-organization" >> $GITHUB_ENV
+          echo "sonar.organization=dotnet-todo" >> $GITHUB_ENV
           echo "sonar.host.url=https://sonarcloud.io" >> $GITHUB_ENV
           echo "sonar.cs.opencover.reportsPaths=$(pwd)/TestResults/Coverage/coverage.opencover.xml" >> $GITHUB_ENV
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v1
         with:
-          projectBaseDir: ./
+          projectBaseDir: ./src # Point to the correct directory
           args: >
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
       - name: Build Docker image
         run: |
           docker build -t devops39/dotnet-todo:latest .
-          docker tag devops39/dotnet-todo:latest devops39/dotnet-todo:v1.0.0
+          docker tag devop39/dotnet-todo:latest devops39/dotnet-todo:v1.0.0
 
       - name: Semantic Versioning
         id: vars
