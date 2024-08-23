@@ -1,37 +1,45 @@
-name: Kubernetes Deployment
+name: Minikube Kubernetes Cluster
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  setup-kubernetes:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up Minikube
-        uses: medyagh/setup-minikube@latest
-        with:
-         
-          driver: docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
 
-      - name: Helm Install
-        run: 
-          helm install myapp ./helm-chart
+      - name: Install Minikube
+        run: |
+          curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          chmod +x minikube
+          sudo mv minikube /usr/local/bin/
 
-      
-       - name: Get Pod Name
-         run: |
-          POD_NAME=$(kubectl get pods -l app=myapp -o jsonpath="{.items[0].metadata.name}")
-          kubectl describe pod $POD_NAME
+      - name: Start Minikube
+        run: |
+          sudo minikube start --driver=none
+          minikube status
 
+      - name: Verify Kubernetes Cluster
+        run: |
+          kubectl get nodes
+          kubectl cluster-info
 
-        
-      - name: Test Application
-        run: 
-          kubectl port-forward service/myapp 8080:80 &
-          curl http://localhost:8080/todo
+      - name: Deploy a sample application
+        run: |
+          kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
+          kubectl expose deployment hello-minikube --type=NodePort --port=8080
+
+      - name: Get application URL
+        run: |
+          minikube service hello-minikube --url
