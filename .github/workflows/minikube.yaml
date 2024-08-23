@@ -20,11 +20,13 @@ jobs:
           driver: docker
 
       - name: Helm Install
-        run: |
+        run: 
           helm install myapp ./helm-chart
-          kubectl get pods
+
+      - name: Get Pods Status
+        run: kubectl get pods
 
       - name: Test Application
-        run: |
+        run: 
           kubectl port-forward service/myapp 8080:80 &
           curl http://localhost:8080/todo

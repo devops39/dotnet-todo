@@ -1,11 +1,24 @@
-- name: Determine version
-  id: version
-  uses: fredrikve/version@v1
-  with:
-    version: v1.0.0
+name: Versioning
 
-- name: Build Docker Image with Version Tag
-  run: |
-    docker build -t myapp:${{ steps.version.outputs.version }} .
-    docker tag myapp:${{ steps.version.outputs.version }} https://github.com/devops39/dotnet-todo/myapp:${{ steps.version.outputs.version }}
-    docker push https://github.com/devops39/dotnet-todo/myapp:${{ steps.version.outputs.version }}
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.35.0
+        env:
+          DEFAULT_BUMP: patch
+          WITH_V: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: false
