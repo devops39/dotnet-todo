@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "GITHUB_SHA_SHORT=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
           echo "IMAGE_TAG=$(echo v1.0.${{ steps.vars.outputs.build_number }})" >> $GITHUB_ENV
-      -name: Start Minikube
+      - name: Start Minikube
         run: |
           curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           chmod +x minikube
