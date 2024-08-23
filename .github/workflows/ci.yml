@@ -58,7 +58,7 @@ jobs:
         run: |
           helm install dotnet-todo ./helm-chart/dotnet-todo
           
-        - name: Run Application Tests
+      - name: Run Application Tests
         run: |
           curl http://$(minikube ip):$(kubectl get svc dotnet-todo -o jsonpath='{.spec.ports[0].nodePort}')
     
