@@ -31,13 +31,20 @@ jobs:
           sudo tar -C /usr/local/bin -xzf crictl-$VERSION-linux-amd64.tar.gz
           rm crictl-$VERSION-linux-amd64.tar.gz
 
+      - name: Install Go 1.23
+        run: |
+          wget https://go.dev/dl/go1.23.0.linux-amd64.tar.gz
+          sudo tar -C /usr/local -xzf go1.23.0.linux-amd64.tar.gz
+          echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.profile
+          source $HOME/.profile
+          go version
+
       - name: Install cri-dockerd
         run: |
-          sudo apt-get install -y git wget curl golang-go
           git clone https://github.com/Mirantis/cri-dockerd.git
           cd cri-dockerd
           mkdir bin
-          go build -o bin/cri-dockerd
+          /usr/local/go/bin/go build -o bin/cri-dockerd
           sudo install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd
           sudo install -o root -g root -m 0644 packaging/systemd/* /etc/systemd/system/
           sudo systemctl daemon-reload
@@ -66,5 +73,4 @@ jobs:
           kubectl expose deployment hello-minikube --type=NodePort --port=8080
 
       - name: Get application URL
-        run: |
-          minikube service hello-minikube --url
+
