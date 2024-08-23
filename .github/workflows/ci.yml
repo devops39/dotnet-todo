@@ -1,4 +1,4 @@
-name: SonarCloud Analysis
+name: CI Pipeline
 
 on:
   push:
@@ -9,41 +9,45 @@ on:
       - main
 
 jobs:
-  sonarCloud:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'  # Set the Java distribution
-          java-version: '17'        # Specify the Java version
+        uses: actions/checkout@v2
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install SonarScanner for .NET
-        run: dotnet tool install --global dotnet-sonarscanner
+      - name: Build the project
+        run: dotnet build --configuration Release
 
-      - name: Add .NET tools to PATH
-        shell: bash
-        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+      - name: Run tests
+        run: dotnet test --configuration Release --collect:"Code Coverage"
 
-      - name: Install dependencies
-        run: dotnet restore src/TodoApi.csproj
-
-      - name: Build the solution
-        run: dotnet build --no-restore src/TodoApi.csproj
-
-      - name: Run SonarCloud scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Prepare SonarCloud properties
         run: |
-          dotnet sonarscanner begin /k:"devops39_dotnet-todo" /o:"devops39" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build src/TodoApi.csproj
-          dotnet sonarscanner end
+          echo "sonar.projectKey=devops39_dotnet-todo" >> $GITHUB_ENV
+          echo "sonar.organization=your-sonarcloud-organization" >> $GITHUB_ENV
+          echo "sonar.host.url=https://sonarcloud.io" >> $GITHUB_ENV
+          echo "sonar.cs.opencover.reportsPaths=$(pwd)/TestResults/Coverage/coverage.opencover.xml" >> $GITHUB_ENV
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          projectBaseDir: ./
+          args: >
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t devops39/dotnet-todo:latest .
+          docker tag devops39/dotnet-todo:latest devops39/dotnet-todo:v1.0.0
+
+      - name: Semantic Versioning
+        id: vars
+        run: |
+          echo "GITHUB_SHA_SHORT=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$(echo v1.0.${{ steps.vars.outputs.build_number }})" >> $GITHUB_ENV
