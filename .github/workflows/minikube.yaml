@@ -25,9 +25,9 @@ jobs:
 
       
        - name: Get Pod Name
-  run: |
-    POD_NAME=$(kubectl get pods -l app=myapp -o jsonpath="{.items[0].metadata.name}")
-    kubectl describe pod $POD_NAME
+         run: |
+          POD_NAME=$(kubectl get pods -l app=myapp -o jsonpath="{.items[0].metadata.name}")
+          kubectl describe pod $POD_NAME
 
 
         
