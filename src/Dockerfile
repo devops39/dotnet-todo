@@ -2,15 +2,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source
 
-# Copy the project file and restore dependencies as distinct layers
+# Copy the solution file and project files
 COPY *.sln .
 COPY src/*.csproj ./src/
 RUN dotnet restore ./src/TodoApi.csproj
 
-# Copy the rest of the application code and build the app
+# Copy all source files and publish the application
 COPY src/. ./src/
 WORKDIR /source/src
-RUN dotnet publish -c release -o /app --no-restore
+RUN dotnet publish -c release -o /app
 
 # Use the official ASP.NET Core runtime image as the base image for the final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
