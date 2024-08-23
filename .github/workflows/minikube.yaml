@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y conntrack
+          sudo apt-get install -y conntrack crictl
 
       - name: Install Minikube
         run: |
