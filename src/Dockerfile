@@ -8,7 +8,7 @@ COPY src/*.csproj ./src/
 RUN dotnet restore ./src/TodoApi.csproj
 
 # Copy all source files and publish the application
-COPY src/. ./src/
+COPY */. ./*
 WORKDIR /source/src
 RUN dotnet publish -c release -o /app
 
