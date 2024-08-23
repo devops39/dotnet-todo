@@ -22,7 +22,9 @@ jobs:
       - name: Helm Install
         run: 
           helm install myapp ./helm-chart
-          kubectl get pods
+
+      - name: Get Pods Status
+        run: kubectl get pods
 
       - name: Test Application
         run: 
