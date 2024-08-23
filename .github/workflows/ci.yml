@@ -38,7 +38,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t devops39/dotnet-todo:latest src/Dockerfile .
+          docker build -t devops39/dotnet-todo:latest -f src/Dockerfile .
           docker tag devops39/dotnet-todo:latest devops39/dotnet-todo:v1.0.0
 
       - name: Semantic Versioning
