@@ -24,8 +24,8 @@ jobs:
           helm install myapp ./helm-chart
 
       - name: Get Pods Status
-        run: kubectl get pods
-
+        run: kubectl get pods --watch
+        
       - name: Test Application
         run: 
           kubectl port-forward service/myapp 8080:80 &
