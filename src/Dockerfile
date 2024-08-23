@@ -6,7 +6,7 @@ EXPOSE 80
 # Use the official .NET SDK as a build image
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["TodoApi.csproj", "."]
+COPY ["src/dotnet-todo.csproj", "."]
 RUN dotnet restore "./dotnet-todo.csproj"
 COPY . .
 WORKDIR "/src"
