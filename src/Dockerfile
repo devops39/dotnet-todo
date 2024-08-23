@@ -1,23 +1,23 @@
-# Copy the project files to the working directory
-COPY . ./
-
-# Restore the dependencies
-RUN dotnet restore
-
-# Build the application in release mode
-RUN dotnet build -c Release --no-restore
-
-# Publish the application to a directory
-RUN dotnet publish -c Release --no-restore -o /app/publish
-
-# Use the official ASP.NET Core runtime image as a runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-
-# Set the working directory inside the container
+# Use the official ASP.NET Core runtime as a parent image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
+EXPOSE 80
 
-# Copy the published output from the build stage
-COPY --from=build /app/publish .
+# Use the official .NET SDK as a build image
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["dotnet-todo.csproj", "."]
+RUN dotnet restore "./dotnet-todo.csproj"
+COPY . .
+WORKDIR "/src"
+RUN dotnet build "dotnet-todo.csproj" -c Release -o /app/build
 
-# Set the entry point for the container
+# Publish the build artifacts
+FROM build AS publish
+RUN dotnet publish "dotnet-todo.csproj" -c Release -o /app/publish
+
+# Use the base image and copy the build artifacts into the final image
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TodoApi.dll"]
