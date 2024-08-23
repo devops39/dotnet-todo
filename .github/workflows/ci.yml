@@ -23,12 +23,12 @@ jobs:
 
       - name: Build the project
         run: |
-          cd src # Navigate to the directory containing the .csproj file
+          cd src # Adjust this if your .csproj is in a different directory
           dotnet build --configuration Release
 
       - name: Run tests
         run: |
-          cd src # Navigate to the directory containing the .csproj file
+          cd src # Adjust this if your .csproj is in a different directory
           dotnet test --configuration Release --collect:"Code Coverage"
 
       - name: Cache SonarCloud packages
@@ -57,6 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          cd src # Adjust this if your .csproj is in a different directory
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"dotnet-todo_dotnet" /o:"dotnet-todo" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build --configuration Release
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
