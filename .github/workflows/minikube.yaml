@@ -1,10 +1,30 @@
--name: Start Minikube
-  run: |
-    curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-    chmod +x minikube
-    sudo mv minikube /usr/local/bin/
-    minikube start --driver=docker
-    
-    
-    
-   
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - name: Build Docker image
+        run: docker build -t dotnet-todo:${{ github.sha }} .
+
+      - name: Set up Minikube
+        uses: manusa/actions-setup-minikube@v4
+
+      - name: Deploy to Minikube
+        run: |
+          helm install dotnet-todo ./helm-chart/dotnet-todo
+
+      - name: Run Tests
+        run: |
+          curl http://localhost:8080/api/todo
