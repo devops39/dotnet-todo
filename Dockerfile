@@ -2,8 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source
 
-# Install curl for testing purposes
-RUN apt-get update && apt-get install -y curl
+
 
 # Copy the solution file and project files
 COPY *.sln .
@@ -18,6 +17,10 @@ RUN dotnet publish -c release -o /app
 # Use the official ASP.NET Core runtime image as the base image for the final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
+
+# Install curl for testing purposes
+RUN apt-get update && apt-get install -y curl
+
 COPY --from=build /app ./
 EXPOSE 80
 
