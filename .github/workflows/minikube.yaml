@@ -50,6 +50,15 @@ jobs:
         run: |
           helm install dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }}
 
+      - name: Check Helm Release Status
+        run: helm status dotnet-todo
+
+      - name: List All Services
+        run: kubectl get services --all-namespaces
+
+      - name: Check Pod Status
+         run: kubectl get pods
+
       - name: Wait for Service to be Available
         run: |
           echo "Waiting for the service to be available..."
