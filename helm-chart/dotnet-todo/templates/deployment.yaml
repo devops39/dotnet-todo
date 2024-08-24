@@ -1,42 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dotnet-todo.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "dotnet-todo.name" . }}
-    helm.sh/chart: {{ include "dotnet-todo.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ include "myapp.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "dotnet-todo.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ include "myapp.name" . }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "dotnet-todo.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: {{ include "myapp.name" . }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-          resources:
-  {{- toYaml .Values.resources | nindent 12 }}
