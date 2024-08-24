@@ -48,7 +48,7 @@ jobs:
 
       - name: Deploy to Minikube using Helm
         run: |
-          helm install dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }}
+          helm upgrade dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }}
 
       - name: Check Helm Release Status
         run: helm status dotnet-todo
