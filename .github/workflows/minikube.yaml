@@ -75,7 +75,7 @@ jobs:
         run: |
           POD_NAME=$(kubectl get pods --selector=app.kubernetes.io/name=dotnet-todo --output=jsonpath="{.items[0].metadata.name}")
           echo "Testing application inside pod $POD_NAME"
-          kubectl exec -it $POD_NAME -- curl -s http://localhost:80 || echo "Application not responding on port 80 inside the pod"
+          kubectl exec  $POD_NAME -- curl -s http://localhost:80 || echo "Application not responding on port 80 inside the pod"
 
       - name: Port-Forward and Run Tests
         run: |
