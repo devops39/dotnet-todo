@@ -67,6 +67,6 @@ jobs:
 
       - name: Port-Forward and Run Tests
         run: |
-          kubectl port-forward service/dotnet-todo 8080:80 &
+          kubectl port-forward service/dotnet-todo-dotnet-todo 8080:80 &          
           sleep 10
           curl http://localhost:8080/api/todo
