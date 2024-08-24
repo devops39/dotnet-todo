@@ -57,7 +57,7 @@ jobs:
         run: kubectl get services --all-namespaces
 
       - name: Check Pod Status
-         run: kubectl get pods
+        run: kubectl get pods
 
       - name: Wait for Service to be Available
         run: |
