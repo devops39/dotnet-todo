@@ -35,8 +35,18 @@ jobs:
         run: |
           helm install dotnet-todo ./helm-chart/dotnet-todo
 
-      - name: Run Tests
+      - name: Verify Kubernetes Resources
+        run: |
+          kubectl get all
+
+      - name: Wait for Service to be Available
+        run: |
+          echo "Waiting for the service to be available..."
+          sleep 30
+          kubectl get services
+
+      - name: Port-Forward and Run Tests
         run: |
           kubectl port-forward service/dotnet-todo 8080:80 &
-          sleep 5
+          sleep 10
           curl http://localhost:8080/api/todo
