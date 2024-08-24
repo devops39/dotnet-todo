@@ -46,9 +46,10 @@ jobs:
           sudo install minikube /usr/local/bin/
           minikube start --driver=docker --kubernetes-version=v1.21.14
 
-      - name: Deploy to Minikube using Helm
+      - name: Attempt to Upgrade Helm Release
         run: |
-          helm upgrade dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }}
+         helm upgrade dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }} || \
+         helm install dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }}
 
       - name: Check Helm Release Status
         run: helm status dotnet-todo
