@@ -27,9 +27,9 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag your-dockerhub-username/dotnet-todo:${{ github.sha }} your-dockerhub-username/dotnet-todo:latest
-          docker push your-dockerhub-username/dotnet-todo:${{ github.sha }}
-          docker push your-dockerhub-username/dotnet-todo:latest
+          docker tag devoops39/dotnet-todo:${{ github.sha }} your-dockerhub-username/dotnet-todo:latest
+          docker push devoops39/dotnet-todo:${{ github.sha }}
+          docker push devoops39/dotnet-todo:latest
 
       - name: Install Dependencies
         run: |
