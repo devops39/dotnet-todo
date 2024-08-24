@@ -14,10 +14,15 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '7.0.x'
 
       - name: Build Docker image
         run: docker build -t dotnet-todo:${{ github.sha }} .
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y conntrack
 
       - name: Set up Minikube
         run: |
