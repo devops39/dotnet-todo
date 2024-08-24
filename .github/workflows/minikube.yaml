@@ -9,22 +9,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
+
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '8.0'
+          dotnet-version: '7.0.x'
 
       - name: Build Docker image
         run: docker build -t dotnet-todo:${{ github.sha }} .
 
       - name: Set up Minikube
-        uses: manusa/actions-setup-minikube@v2
+        run: |
+          curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          chmod +x minikube
+          sudo mkdir -p /usr/local/bin/
+          sudo install minikube /usr/local/bin/
+          sudo minikube start --driver=none --kubernetes-version=v1.21.14
+          minikube status
 
-      - name: Deploy to Minikube
+      - name: Deploy to Minikube using Helm
         run: |
           helm install dotnet-todo ./helm-chart/dotnet-todo
 
       - name: Run Tests
         run: |
+          kubectl port-forward service/dotnet-todo 8080:80 &
+          sleep 5
           curl http://localhost:8080/api/todo
