@@ -27,7 +27,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   uri                     = aws_lambda_function.todo_app.invoke_arn
 }
 
-resource "aws_api_gateway_deployment" "deployment" {
+resource "aws_api_gateway_deployment" "todo_deployment" {
   depends_on  = [aws_api_gateway_integration.lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.todo_api.id
   stage_name  = "prod"
