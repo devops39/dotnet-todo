@@ -25,7 +25,7 @@ resource "aws_lambda_function" "todo_app" {
   filename      = "path/to/your/package.zip"  # Path to your packaged Lambda deployment file
 
   vpc_config {
-    subnet_ids         = data.aws_subnet_ids.default.ids
+    subnet_ids         = data.aws_subnets.default.ids
     security_group_ids = [data.aws_security_group.default.id]
   }
 
