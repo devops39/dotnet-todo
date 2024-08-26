@@ -22,9 +22,6 @@ data "aws_vpc" "default" {
 
 
 
-output "api_gateway_url" {
-  value = aws_api_gateway_deployment.deployment.invoke_url
-}
 
 # Data source to retrieve the default security group
 data "aws_security_group" "default" {
