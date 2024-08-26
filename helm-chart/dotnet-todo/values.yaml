@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: devoops39/dotnet-todo
+  repository: docker.io/devoops39/dotnet-todo
   tag: latest
   pullPolicy: IfNotPresent
 

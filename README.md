@@ -39,11 +39,11 @@ This app uses an in-memory database. If the app is restarted, the GET request do
 
 ## Building and Running the Docker Image
 
-To build the Docker image:
-```sh
+
+```
 docker build -t appimg .
 
 docker run -d -p 8080:80 --name myapp devoops39/dotnet-todo:latest
-
+```
 Access the Application:
 Open your browser and navigate to http://localhost:8080.
