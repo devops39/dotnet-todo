@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: https://github.com/devops39/dotnet-todo/myapp
+  repository: https://github.com/devops39/dotnet-todo
   tag: latest
   pullPolicy: IfNotPresent
 
