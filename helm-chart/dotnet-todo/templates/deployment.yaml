@@ -28,7 +28,7 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /todoitems
               port: 80   # Update this to match the containerPort
             initialDelaySeconds: 30
             timeoutSeconds: 5
