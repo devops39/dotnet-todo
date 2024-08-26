@@ -43,7 +43,7 @@ To build the Docker image:
 ```sh
 docker build -t appimg .
 
-docker run -d -p 8080:80 appimg
+docker run -d -p 8080:8080 appimg
 
 Access the Application:
 Open your browser and navigate to http://localhost:8080.
