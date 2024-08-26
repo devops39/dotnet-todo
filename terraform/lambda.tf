@@ -36,18 +36,3 @@ resource "aws_lambda_function" "todo_app" {
   }
 }
 
-data "aws_subnet_ids" "default" {
-  vpc_id = data.aws_vpc.default.id
-}
-
-data "aws_security_group" "default" {
-  vpc_id = data.aws_vpc.default.id
-  filter {
-    name   = "group-name"
-    values = ["default"]
-  }
-}
-
-data "aws_vpc" "default" {
-  default = true
-}
