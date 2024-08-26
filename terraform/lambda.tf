@@ -21,7 +21,7 @@ resource "aws_lambda_function" "todo_app" {
   function_name = "todo-app-lambda"
   role          = aws_iam_role.lambda_role.arn
   handler       = "app.lambda_handler"
-  runtime       = "dotnet 8.0"  # Change to your application runtime
+  runtime       = "python3.8"  # Change to your application runtime
   image_uri     = "docker.io/devoops39/todo-app:latest"  # Path to your packaged Lambda deployment file
 
   vpc_config {
