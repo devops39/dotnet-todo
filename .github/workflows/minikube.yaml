@@ -83,4 +83,4 @@ jobs:
         run: |
           kubectl port-forward service/dotnet-todo-dotnet-todo 8080:8080 &
           sleep 10
-          curl http://localhost:8080/api/todo || echo "Port-forwarding failed or application not responding"
+          curl http://localhost:8080/todoitems || echo "Port-forwarding failed or application not responding"
