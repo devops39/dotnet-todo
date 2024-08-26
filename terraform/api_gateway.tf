@@ -33,6 +33,4 @@ resource "aws_api_gateway_deployment" "todo_deployment" {
   stage_name  = "prod"
 }
 
-output "api_gateway_url" {
-  value = aws_api_gateway_deployment.deployment.invoke_url
-}
+
