@@ -25,7 +25,7 @@ resource "aws_lambda_function" "todo_app" {
 
   vpc_config {
     subnet_ids         = data.aws_subnets.default.ids
-    security_group_ids = [data.aws_security_group.default.id]
+    security_group_ids = [data.aws_security_group.lambda_sg.id]
   }
 
   environment {
