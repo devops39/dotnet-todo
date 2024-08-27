@@ -77,10 +77,10 @@ jobs:
         run: |
           POD_NAME=$(kubectl get pods --selector=app.kubernetes.io/name=dotnet-todo --output=jsonpath="{.items[0].metadata.name}")
           echo "Testing application inside pod $POD_NAME"
-          kubectl exec  $POD_NAME -- curl -s http://localhost:8080/todoitems || echo "Application not responding on port 8080 inside the pod"
+          kubectl exec  $POD_NAME -- curl -s http://localhost:5001/todoitems || echo "Application not responding on port 5001 inside the pod"
 
       - name: Port-Forward and Run Tests
         run: |
-          kubectl port-forward service/dotnet-todo-dotnet-todo 8080:8080 &
+          kubectl port-forward service/dotnet-todo-dotnet-todo 5001:5001 &
           sleep 10
-          curl http://localhost:8080/todoitems || echo "Port-forwarding failed or application not responding"
+          curl http://localhost:5001/todoitems || echo "Port-forwarding failed or application not responding"
