@@ -37,13 +37,42 @@ The call to GET /todoitems produces a response similar to the following:
 
 This app uses an in-memory database. If the app is restarted, the GET request doesn't return any data. If no data is returned, POST data to the app and try the GET request again.
 
+
+
 ## Building and Running the Docker Image
 
-
 ```
-docker build -t appimg .
+docker build -t dotnet-todo.
 
-docker run -d -p 8080:80 --name myapp devoops39/dotnet-todo:latest
+docker run -d -p 5001:80 --name myapp devoops39/dotnet-todo:latest
 ```
-Access the Application:
-Open your browser and navigate to http://localhost:8080.
+
+
+## Deploying with Helm
+
+### Prerequisites
+- Helm installed on your local machine.
+- Kubernetes cluster running (e.g., Minikube).
+
+### Steps to Deploy
+
+ **Install the Helm Chart**:
+```
+   helm install dotnet-todo ./helm-chart
+```
+
+
+## GitHub Actions Workflow
+
+This workflow automatically builds, tests, and deploys the application using a Kubernetes cluster.
+
+### Workflow Overview
+
+- **Checkout Code**: Retrieves the latest code from the repository.
+- **Set up Minikube**: Initializes a Minikube cluster for testing.
+- **Deploy Helm Chart**: Deploys the application using the Helm chart created in Step 2.
+- **Test Application**: Runs a series of tests against the deployed application endpoints.
+
+To rerun the workflow, push a new commit to the repository.
+
+
