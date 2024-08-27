@@ -20,6 +20,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 resource "aws_lambda_function" "todo_app" {
   function_name = "todo-app-lambda"
   role          = aws_iam_role.terraadmin.arn
+  package_type  = "Image"
   image_uri     = "docker.io/devoops39/dotnet-todo:latest"  # Path to your packaged Lambda deployment file
 
   vpc_config {
