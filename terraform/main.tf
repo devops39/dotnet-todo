@@ -13,7 +13,7 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
-  profile = "itadmin"
+  profile = "terraadmin"
 }
 
 # Data source to retrieve information about the default VPC
