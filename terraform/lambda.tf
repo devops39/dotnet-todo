@@ -37,6 +37,7 @@ resource "aws_lambda_function" "todo_app" {
   role          = aws_iam_role.terraadmin.arn
   package_type  = "Image"  # Indicate that this is an image-based Lambda function
   image_uri     = "607968074640.dkr.ecr.us-east-1.amazonaws.com/devoops39:latest"  # Use your correct image URI
+  timeout       = 60
 
   vpc_config {
     subnet_ids         = data.aws_subnets.default.ids
