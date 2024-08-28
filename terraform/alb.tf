@@ -30,7 +30,7 @@ resource "aws_lb_listener_rule" "route_todoitems" {
   }
   condition {
     field  = "path-pattern"
-    values = ["/todoitems*", "/todoitems/{id}"]
+    values = ["/todoitems", "/todoitems/{id}"]
   }
 }
 
