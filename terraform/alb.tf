@@ -1,21 +1,3 @@
-# Reference the existing S3 bucket
-data "aws_s3_bucket" "alb_logs" {
-  bucket = "myappbucket99"  # Reference the existing bucket name
-}
-
-
-
-
-
-# S3 Bucket Versioning Configuration
-resource "aws_s3_bucket_versioning" "alb_logs_versioning" {
-  bucket = data.aws_s3_bucket.alb_logs.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
 # Fetch AWS Account ID
 data "aws_caller_identity" "current" {}
 
@@ -26,12 +8,6 @@ resource "aws_lb" "app_lb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]
   subnets            = data.aws_subnets.default.ids
-
-  access_logs {
-    bucket  = data.aws_s3_bucket.alb_logs.bucket
-    prefix  = "alb"
-    enabled = true
-  }
 }
 
 # Target Group for Lambda Function with Health Checks
