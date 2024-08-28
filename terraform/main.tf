@@ -37,36 +37,26 @@ data "aws_subnets" "default" {
 }
 
 # Create a new security group allowing HTTP and HTTPS traffic
-resource "aws_security_group" "lambda_sg" {
-  name        = "lambda-sg"
-  description = "Security group for Lambda function allowing HTTP and HTTPS traffic"
+resource "aws_security_group" "lb_sg" {
+  name        = "alb-security-group"
+  description = "Security group for the ALB"
   vpc_id      = data.aws_vpc.default.id
 
-  # Inbound rule to allow HTTP traffic
   ingress {
-    description = "Allow HTTP traffic"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Inbound rule to allow HTTPS traffic
-  ingress {
-    description = "Allow HTTPS traffic"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Outbound rule to allow all traffic
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"  # Allows all protocols
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
 
   tags = {
     Name = "lambda-sg"
