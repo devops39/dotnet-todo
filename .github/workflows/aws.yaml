@@ -20,9 +20,6 @@ jobs:
         with:
           terraform_version: 1.3.0  # Ensure this matches your local Terraform version
 
-      - name: Check AWS Identity
-        run: aws sts get-caller-identity
-
 
       - name: Initialize Terraform
         working-directory: ./terraform
