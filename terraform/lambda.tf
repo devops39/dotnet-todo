@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
 resource "aws_lambda_function" "todo_app" {
   function_name = "todo-app-lambda"
   role          = aws_iam_role.terraadmin.arn
-  handler       = "app.lambda_handler"      # Update with the correct handler for your function
+  handler       = "TodoApp::TodoApp.Function::FunctionHandler"      # Update with the correct handler for your function
   runtime       = "dotnet 8.0"               # Update with the correct runtime for your function
   s3_bucket     = "myappbucket99"     # Replace with your S3 bucket name
   s3_key        = "dotnet-todo.zip"  # Replace with the S3 key (path) to your ZIP file
