@@ -23,9 +23,22 @@ resource "aws_s3_bucket_policy" "alb_logs_policy" {
       {
         Effect = "Allow",
         Principal = {
-          Service = "logging.s3.amazonaws.com"
+          Service = "elasticloadbalancing.amazonaws.com"
         },
         Action   = "s3:PutObject",
+        Resource = "${data.aws_s3_bucket.alb_logs.arn}/*",
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
+          }
+        }
+      },
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "elasticloadbalancing.amazonaws.com"
+        },
+        Action   = "s3:PutObjectAcl",
         Resource = "${data.aws_s3_bucket.alb_logs.arn}/*",
         Condition = {
           StringEquals = {
@@ -36,6 +49,7 @@ resource "aws_s3_bucket_policy" "alb_logs_policy" {
     ]
   })
 }
+
 
 # S3 Bucket Versioning Configuration
 resource "aws_s3_bucket_versioning" "alb_logs_versioning" {
