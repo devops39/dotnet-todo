@@ -44,7 +44,7 @@ This app uses an in-memory database. If the app is restarted, the GET request do
 ```
 docker build -t dotnet-todo.
 
-docker run -d -p 5001:80 --name myapp devoops39/dotnet-todo:latest
+docker run -d -p 5001:8080 --name myapp devoops39/dotnet-todo:latest
 ```
 
 

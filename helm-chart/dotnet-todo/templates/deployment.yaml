@@ -24,18 +24,18 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /todoitems
-              port: 80   # Update this to match the containerPort
+              port: 8080   # Update this to match the containerPort
             initialDelaySeconds: 30
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 80  # Update this to match the containerPort
+              port: 8080  # Update this to match the containerPort
             initialDelaySeconds: 5
             timeoutSeconds: 1
           resources:
