@@ -13,42 +13,7 @@ resource "aws_s3_bucket_public_access_block" "alb_logs_public_access" {
   restrict_public_buckets = true
 }
 
-# S3 Bucket Policy to Allow ALB to Write Logs
-resource "aws_s3_bucket_policy" "alb_logs_policy" {
-  bucket = data.aws_s3_bucket.alb_logs.id
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "elasticloadbalancing.amazonaws.com"
-        },
-        Action   = "s3:PutObject",
-        Resource = "${data.aws_s3_bucket.alb_logs.arn}/*",
-        Condition = {
-          StringEquals = {
-            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
-          }
-        }
-      },
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "elasticloadbalancing.amazonaws.com"
-        },
-        Action   = "s3:PutObjectAcl",
-        Resource = "${data.aws_s3_bucket.alb_logs.arn}/*",
-        Condition = {
-          StringEquals = {
-            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
-          }
-        }
-      }
-    ]
-  })
-}
 
 
 # S3 Bucket Versioning Configuration
