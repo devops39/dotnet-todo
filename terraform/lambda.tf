@@ -25,14 +25,18 @@ resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
-# Create the Lambda function
+# Attach ECR access policy to the Lambda role
+resource "aws_iam_role_policy_attachment" "lambda_ecr_access" {
+  role       = aws_iam_role.terraadmin.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+# Create the Lambda function using ECR image
 resource "aws_lambda_function" "todo_app" {
   function_name = "todo-app-lambda"
   role          = aws_iam_role.terraadmin.arn
-  handler       = "TodoApp::TodoApp.Function::FunctionHandler"  # Update with the correct handler for your function
-  runtime       = "dotnet6"                                     # Use the correct runtime for your function
-  s3_bucket     = "myappbucket99"                               # Replace with your S3 bucket name
-  s3_key        = "dotnet-todo.zip"                             # Replace with the S3 key (path) to your ZIP file
+  package_type  = "Image"  # Indicate that this is an image-based Lambda function
+  image_uri     = "607968074640.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest"  # Replace with your ECR image URI
 
   vpc_config {
     subnet_ids         = data.aws_subnets.default.ids
