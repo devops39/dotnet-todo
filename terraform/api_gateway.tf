@@ -47,11 +47,37 @@ resource "aws_api_gateway_integration" "get_todoitems_integration" {
   uri                     = aws_lambda_function.todo_app.invoke_arn
 }
 
+# Create the /todoitems/{id} resource
+resource "aws_api_gateway_resource" "todoitem_id" {
+  rest_api_id = aws_api_gateway_rest_api.todo_api.id
+  parent_id   = aws_api_gateway_resource.todoitems.id
+  path_part   = "{id}"
+}
+
+# Create the GET method for /todoitems/{id}
+resource "aws_api_gateway_method" "get_todoitem_by_id" {
+  rest_api_id   = aws_api_gateway_rest_api.todo_api.id
+  resource_id   = aws_api_gateway_resource.todoitem_id.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+# Integrate the GET method with the Lambda function
+resource "aws_api_gateway_integration" "get_todoitem_by_id_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.todo_api.id
+  resource_id             = aws_api_gateway_resource.todoitem_id.id
+  http_method             = aws_api_gateway_method.get_todoitem_by_id.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.todo_app.invoke_arn
+}
+
 # Deploy the API to the "prod" stage
 resource "aws_api_gateway_deployment" "todo_deployment" {
   depends_on = [
     aws_api_gateway_integration.post_todoitems_integration,
-    aws_api_gateway_integration.get_todoitems_integration
+    aws_api_gateway_integration.get_todoitems_integration,
+    aws_api_gateway_integration.get_todoitem_by_id_integration
   ]
   rest_api_id = aws_api_gateway_rest_api.todo_api.id
   stage_name  = "prod"
