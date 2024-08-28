@@ -19,7 +19,6 @@ resource "aws_lb_target_group" "lambda_tg" {
   # Health Check Configuration
   health_check {
     enabled             = true
-    path                = "/todoitems"
     matcher             = "200-299"
     interval            = 30
     timeout             = 5
@@ -60,7 +59,7 @@ resource "aws_lb_listener_rule" "route_todoitems" {
 resource "aws_lambda_permission" "alb_lambda" {
   statement_id  = "AllowExecutionFromALB"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.todo_app.function_name
+  function_name = "todo-app-lambda"  # Ensure this is the correct function name
   principal     = "elasticloadbalancing.amazonaws.com"
   source_arn    = aws_lb_target_group.lambda_tg.arn
 }
