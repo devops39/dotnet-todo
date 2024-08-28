@@ -17,12 +17,12 @@ RUN dotnet publish -c release -o /app
 # Use the official ASP.NET Core runtime image as the base image for the final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-ENV ASPNETCORE_URLS=http://0.0.0.0:80
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 
 # Install curl for testing purposes
 RUN apt-get update && apt-get install -y curl
 
 COPY --from=build /app ./
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "TodoApi.dll"]
