@@ -55,12 +55,12 @@ resource "aws_security_group" "lb_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
 
   tags = {
-    Name = "lambda-sg"
+    Name = "alb-security-group"
   }
+}
+
 
 
 # Define any other global resources or modules
