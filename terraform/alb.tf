@@ -3,15 +3,6 @@ data "aws_s3_bucket" "alb_logs" {
   bucket = "myappbucket99"  # Reference the existing bucket name
 }
 
-# Public Access Block for S3 Bucket
-resource "aws_s3_bucket_public_access_block" "alb_logs_public_access" {
-  bucket = data.aws_s3_bucket.alb_logs.id
-
-  block_public_acls   = true
-  block_public_policy = true
-  ignore_public_acls  = true
-  restrict_public_buckets = true
-}
 
 
 
