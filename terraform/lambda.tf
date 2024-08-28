@@ -48,7 +48,7 @@ resource "aws_lambda_function" "todo_app" {
 
 # Allow ALB to invoke the Lambda function
 resource "aws_lambda_permission" "alb_lambda_permission" {
-  statement_id  = "AllowExecutionFromALB"
+  statement_id  = "AllowExecutionFromALB-${terraform.time}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.todo_app.function_name
   principal     = "elasticloadbalancing.amazonaws.com"
