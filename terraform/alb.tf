@@ -63,5 +63,5 @@ resource "aws_lb_listener_rule" "route_todoitems" {
   #source_arn    = aws_lb_target_group.lambda_tg.arn
 
   # Ensure that the Lambda function is created before applying this permission
-  depends_on = [aws_lambda_function.todo_app]
-}
+  #depends_on = [aws_lambda_function.todo_app]
+#}
