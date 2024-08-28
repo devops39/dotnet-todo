@@ -61,6 +61,6 @@ resource "aws_security_group" "lb_sg" {
   tags = {
     Name = "lambda-sg"
   }
-}
+
 
 # Define any other global resources or modules
