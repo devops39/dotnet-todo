@@ -6,14 +6,14 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.0"
     }
+  }
 
-    backend "s3" {
-      bucket         = "myappbucket99"  # Replace with your actual bucket name
-      key            = "myappbucket99/terraform.tfstate"  # Path to your state file within the bucket
-      region         = "us-east-1"  # AWS region where your bucket is located
-      #dynamodb_table = "terraform-locks"  # (Optional) DynamoDB table for state locking
-      encrypt        = true  # Encrypt state at rest
-    }
+  backend "s3" {
+    bucket         = "myappbucket99"  # Replace with your actual bucket name
+    key            = "myappbucket99/terraform.tfstate"  # Path to your state file within the bucket
+    region         = "us-east-1"  # AWS region where your bucket is located
+    #dynamodb_table = "terraform-locks"  # (Optional) DynamoDB table for state locking
+    encrypt        = true  # Encrypt state at rest
   }
 
   required_version = ">= 1.3.0"
@@ -24,14 +24,10 @@ provider "aws" {
   #profile = "terraadmin"
 }
 
-
-
-
 # Data source to retrieve information about the default VPC
 data "aws_vpc" "default" {
   default = true
 }
-
 
 data "aws_subnets" "default" {
   filter {
@@ -39,8 +35,6 @@ data "aws_subnets" "default" {
     values = [data.aws_vpc.default.id]
   }
 }
-
-
 
 # Create a new security group allowing HTTP and HTTPS traffic
 resource "aws_security_group" "lambda_sg" {
