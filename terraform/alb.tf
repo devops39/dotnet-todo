@@ -2,17 +2,28 @@
 resource "aws_s3_bucket" "alb_logs" {
   bucket = "myappbucket99" # Using your specified bucket name
 
-  # Enable default S3 Block Public Access settings to ensure the bucket is private
-  block_public_acls   = true
-  block_public_policy = true
-
-  versioning {
-    enabled = true
-  }
-
   lifecycle {
     prevent_destroy = true
   }
+}
+
+# S3 Bucket Versioning Configuration
+resource "aws_s3_bucket_versioning" "alb_logs_versioning" {
+  bucket = aws_s3_bucket.alb_logs.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# Public Access Block for S3 Bucket
+resource "aws_s3_bucket_public_access_block" "alb_logs_public_access" {
+  bucket = aws_s3_bucket.alb_logs.id
+
+  block_public_acls   = true
+  block_public_policy = true
+  ignore_public_acls  = true
+  restrict_public_buckets = true
 }
 
 # S3 Bucket Policy to Allow ALB to Write Logs
