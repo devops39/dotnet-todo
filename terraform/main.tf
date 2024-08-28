@@ -16,6 +16,15 @@ provider "aws" {
   #profile = "terraadmin"
 }
 
+
+backend "s3" {
+    bucket         = "myappbucket99"  # Replace with your actual bucket name
+    key            = "myappbucket99/terraform.tfstate"  # Path to your state file within the bucket
+    region         = "us-east-1"  # AWS region where your bucket is located
+    #dynamodb_table = "terraform-locks"  # (Optional) DynamoDB table for state locking
+    encrypt        = true  # Encrypt state at rest
+  }
+
 # Data source to retrieve information about the default VPC
 data "aws_vpc" "default" {
   default = true
