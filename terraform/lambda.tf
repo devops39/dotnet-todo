@@ -46,7 +46,7 @@ resource "aws_lambda_function" "todo_app" {
 
   environment {
     variables = {
-      ASPNETCORE_URLS = "http://0.0.0.0:80"
+      ASPNETCORE_URLS = "http://0.0.0.0:8080"
     }
   }
 }
