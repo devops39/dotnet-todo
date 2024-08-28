@@ -24,13 +24,17 @@ resource "aws_lb_listener" "http_listener" {
 
 resource "aws_lb_listener_rule" "route_todoitems" {
   listener_arn = aws_lb_listener.http_listener.arn
+  priority     = 100
+
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.lambda_tg.arn
   }
+
   condition {
-    field  = "path-pattern"
-    values = ["/todoitems*", "/todoitems/{id}"]
+    path_pattern {
+      values = ["/todoitems*", "/todoitems/{id}"]
+    }
   }
 }
 
