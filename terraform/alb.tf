@@ -62,4 +62,7 @@ resource "aws_lambda_permission" "alb_lambda" {
   function_name = aws_lambda_function.todo_app.function_name  # Ensure this is the correct function name
   principal     = "elasticloadbalancing.amazonaws.com"
   source_arn    = aws_lb_target_group.lambda_tg.arn
+
+  # Ensure that the Lambda function is created before applying this permission
+  depends_on = [aws_lambda_function.todo_app]
 }
