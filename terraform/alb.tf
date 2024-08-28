@@ -59,7 +59,7 @@ resource "aws_lb_listener_rule" "route_todoitems" {
 resource "aws_lambda_permission" "alb_lambda" {
   statement_id  = "AllowExecutionFromALB"
   action        = "lambda:InvokeFunction"
-  function_name = "todo-app-lambda"  # Ensure this is the correct function name
+  function_name = aws_lambda_function.todo_app.function_name  # Ensure this is the correct function name
   principal     = "elasticloadbalancing.amazonaws.com"
   source_arn    = aws_lb_target_group.lambda_tg.arn
 }
