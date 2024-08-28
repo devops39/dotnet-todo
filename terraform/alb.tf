@@ -1,24 +1,11 @@
-# S3 Bucket for ALB Logs
-resource "aws_s3_bucket" "alb_logs" {
-  bucket = "myappbucket99" # Using your specified bucket name
-
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-
-# S3 Bucket Versioning Configuration
-resource "aws_s3_bucket_versioning" "alb_logs_versioning" {
-  bucket = aws_s3_bucket.alb_logs.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
+# Reference the existing S3 bucket
+data "aws_s3_bucket" "alb_logs" {
+  bucket = "myappbucket99"  # Reference the existing bucket name
 }
 
 # Public Access Block for S3 Bucket
 resource "aws_s3_bucket_public_access_block" "alb_logs_public_access" {
-  bucket = aws_s3_bucket.alb_logs.id
+  bucket = data.aws_s3_bucket.alb_logs.id
 
   block_public_acls   = true
   block_public_policy = true
@@ -28,7 +15,7 @@ resource "aws_s3_bucket_public_access_block" "alb_logs_public_access" {
 
 # S3 Bucket Policy to Allow ALB to Write Logs
 resource "aws_s3_bucket_policy" "alb_logs_policy" {
-  bucket = aws_s3_bucket.alb_logs.id
+  bucket = data.aws_s3_bucket.alb_logs.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -39,7 +26,7 @@ resource "aws_s3_bucket_policy" "alb_logs_policy" {
           Service = "logging.s3.amazonaws.com"
         },
         Action   = "s3:PutObject",
-        Resource = "${aws_s3_bucket.alb_logs.arn}/*",
+        Resource = "${data.aws_s3_bucket.alb_logs.arn}/*",
         Condition = {
           StringEquals = {
             "aws:SourceAccount" = data.aws_caller_identity.current.account_id
@@ -48,6 +35,15 @@ resource "aws_s3_bucket_policy" "alb_logs_policy" {
       }
     ]
   })
+}
+
+# S3 Bucket Versioning Configuration
+resource "aws_s3_bucket_versioning" "alb_logs_versioning" {
+  bucket = data.aws_s3_bucket.alb_logs.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 # Fetch AWS Account ID
@@ -62,7 +58,7 @@ resource "aws_lb" "app_lb" {
   subnets            = data.aws_subnets.default.ids
 
   access_logs {
-    bucket  = aws_s3_bucket.alb_logs.bucket
+    bucket  = data.aws_s3_bucket.alb_logs.bucket
     prefix  = "alb"
     enabled = true
   }
