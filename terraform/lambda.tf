@@ -8,7 +8,6 @@ resource "aws_iam_role" "terraadmin" {
       Effect = "Allow"
       Principal = {
         Service = "lambda.amazonaws.com"
-        "AWS": "arn:aws:iam::account-id:root"
       }
     }]
   })

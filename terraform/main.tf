@@ -14,7 +14,7 @@ terraform {
     region         = "us-east-1"  # AWS region where your bucket is located
     #dynamodb_table = "terraform-locks"  # (Optional) DynamoDB table for state locking
     encrypt        = true  # Encrypt state at rest
-    role_arn      = "arn:aws:iam::account-id:role/terraadmin"
+
   }
 
   required_version = ">= 1.3.0"
