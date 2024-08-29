@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket         = "myappbucket99"  # Replace with your actual bucket name
-    key            = "myappbucket99/terraform.tfstate"  # Path to your state file within the bucket
+    key            = "state"  # Path to your state file within the bucket
     region         = "us-east-1"  # AWS region where your bucket is located
     #dynamodb_table = "terraform-locks"  # (Optional) DynamoDB table for state locking
     encrypt        = true  # Encrypt state at rest
