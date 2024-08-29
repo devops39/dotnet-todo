@@ -45,6 +45,4 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
         run: terraform apply -auto-approve
 
-      - name: Output ALB URL
-        working-directory: ./terraform
-        run: terraform output alb_dns_name
+
