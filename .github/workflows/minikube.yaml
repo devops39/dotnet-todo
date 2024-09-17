@@ -49,8 +49,8 @@ jobs:
 
       - name: Attempt to Upgrade Helm Release
         run: |
-         helm upgrade dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }} || \
-         helm install dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }}
+          helm upgrade dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }} || \
+          helm install dotnet-todo ./helm-chart/dotnet-todo --set image.repository=devoops39/dotnet-todo --set image.tag=${{ github.sha }}
 
       - name: Check Helm Release Status
         run: helm status dotnet-todo
@@ -59,28 +59,27 @@ jobs:
         run: kubectl get services --all-namespaces
 
       - name: Check Pod Status
-        run: kubectl get pods
-
-      - name: Wait for Service to be Available
         run: |
-          echo "Waiting for the service to be available..."
           sleep 30
           kubectl get services
 
       - name: Check Pod Logs
         run: |
-         POD_NAME=$(kubectl get pods --selector=app.kubernetes.io/name=dotnet-todo --output=jsonpath="{.items[0].metadata.name}")
-         echo "Checking logs for pod $POD_NAME"
-         kubectl logs $POD_NAME
-
-      #- name: Test Application Inside Pod
-        #run: |
-          #POD_NAME=$(kubectl get pods --selector=app.kubernetes.io/name=dotnet-todo --output=jsonpath="{.items[0].metadata.name}")
-          #echo "Testing application inside pod $POD_NAME"
-          #kubectl exec  $POD_NAME -- curl -s http://localhost:5001/todoitems || echo "Application not responding on port 5001 inside the pod"
+          POD_NAME=$(kubectl get pods --selector=app.kubernetes.io/name=dotnet-todo --output=jsonpath="{.items[0].metadata.name}")
+          echo "Checking logs for pod $POD_NAME"
+          kubectl logs $POD_NAME
 
       - name: Port-Forward and Run Tests
         run: |
           kubectl port-forward service/dotnet-todo-dotnet-todo 5001:5001 &
           sleep 10
           curl http://localhost:5001/todoitems || echo "Port-forwarding failed or application not responding"
+
+      - name: Test Application Inside Pod
+        run: |
+          POD_NAME=$(kubectl get pods --selector=app.kubernetes.io/name=dotnet-todo --output=jsonpath="{.items[0].metadata.name}")
+          echo "Testing GET /todoitems endpoint inside pod $POD_NAME"
+          kubectl exec  $POD_NAME -- curl -s http://localhost:5001/todoitems || echo "GET /todoitems failed"
+          
+          echo "Testing GET /todoitems/1 endpoint inside pod $POD_NAME"
+          kubectl exec  $POD_NAME -- curl -s http://localhost:5001/todoitems/1 || echo "GET /todoitems/1 failed"
