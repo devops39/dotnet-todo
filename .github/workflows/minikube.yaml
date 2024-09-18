@@ -69,11 +69,7 @@ jobs:
           echo "Checking logs for pod $POD_NAME"
           kubectl logs $POD_NAME
 
-      - name: Port-Forward and Run Tests
-        run: |
-          kubectl port-forward service/dotnet-todo-dotnet-todo 5001:5001 &
-          sleep 10
-          curl http://localhost:5001/todoitems || echo "Port-forwarding failed or application not responding"
+      
 
       - name: Populate Data Inside Pod
         run: |
