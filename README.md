@@ -58,7 +58,7 @@ docker run -d -p 5001:8080 --name myapp devoops39/dotnet-todo:latest
 
  **Install the Helm Chart**:
 ```
-   helm install dotnet-todo ./helm-chart
+   helm install dotnet-todo ./helm-chart/dotnet-todo
 ```
 
 
